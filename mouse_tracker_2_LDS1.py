@@ -39,10 +39,7 @@ while time.time()-start_time < 10: # for 10 seconds
 
     # Calculate new tracker point: constant velocity LDS
     k = k+1
-    if x_m-x_t > 0:
-        theta = np.arctan((y_t-y_m)/(x_t-x_m))
-    else :
-        theta = np.pi+np.arctan((y_t-y_m)/(x_t-x_m))
+    theta = np.arctan2(y_m-y_t,x_m-x_t)
     x_k = np.array([x_t, y_t, np.cos(theta)*v, np.sin(theta)*v])
     G = np.array([[1,0,1,0],[0,1,0,1],[0,0,1,0],[0,0,0,1]])
     x_kk = G@x_k.T
