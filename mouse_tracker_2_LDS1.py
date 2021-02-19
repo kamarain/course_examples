@@ -1,8 +1,11 @@
-# This scripts demonstrates "stupid" mouse tracker, i.e.:
+# This scripts demonstrates LDS mouse tracker
 #
-#   * the trackers has no "physical" limitations beyond its
-#     frame rate f_t - on that frame rate it can "teleport"
-#     (apparition in Harry Potter) anywhere in the space
+#   Linear Dynamic System (LDS) - constant speed
+#
+#     x^d = A
+#
+#   The tracker is still not realistic as it can turn to any angle
+#   without delay
 #
 import matplotlib.pyplot as plt
 from matplotlib.collections import EventCollection

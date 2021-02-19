@@ -1,4 +1,4 @@
-# This scripts demonstrates "stupid" mouse tracker, i.e.:
+# This scripts demonstrates "apparation" mouse tracker
 #
 #   * the trackers has no "physical" limitations beyond its
 #     frame rate f_t - on that frame rate it can "teleport"
