@@ -1,12 +1,9 @@
-# This scripts demonstrates LDS mouse tracker
+# MOUSE_TRACKER_2.PY
 #
-#   Linear Dynamic System (LDS) - constant speed
+#   * This tracker has constant velocity and constant angular velocity and
+#     observes target at the frame rate of 1/t_s
 #
-#     [theta^d v^d] = x^d = A
-#
-#   This tracker is semi-realistic - it moves on constant speed and
-#   it rotates on constant speeed. Semi in the sense that switching
-#   the rotation direction immediately is not completely realistic.
+#     x^ = [v v_theta]
 #
 import matplotlib.pyplot as plt
 from matplotlib.collections import EventCollection
@@ -14,12 +11,12 @@ import numpy as np
 import time
 
 # Environment initialization
-f_t = 1/10 # tracker frame rate per second
+t_s = 1/8 # sampling time in seconds
 x_m, y_m = +5,+5 # mouse start point
 x_t, y_t = -5,-5 # tracker start point
-theta_t = 0
-v = 2.0*f_t # constant velocity per second
-v_theta = 2*np.pi*1*f_t # constant rotation per second
+theta_t = 0 # tracker angle start point
+v = 2.0*t_s # constant velocity per second 
+v_theta = 0.5*np.pi*t_s # constant rotation per second (1*pi is 180deg)
 
 # Make "environment"
 fig = plt.figure()
@@ -38,13 +35,16 @@ def mouse_move(event):
         x_m, y_m = event.xdata, event.ydata
 plt.connect('motion_notify_event', mouse_move)
 
-k = 0 # Discrete time step
-start_time = time.time()
-while time.time()-start_time < 20: # for 10 seconds
+# Handler to get keyboard inputs
+def key_pressed(event):
+    if event.key == 'q': # quit
+        exit()
+plt.connect('key_press_event', key_pressed)
+
+# Main loop for tracking
+while True:
     old_point.remove()
 
-    # Calculate new tracker point: constant velocity LDS
-    k = k+1
     # Global angle from the current location to target
     theta = np.arctan2(y_m-y_t,x_m-x_t)
     # Move to [0,360]
@@ -69,8 +69,6 @@ while time.time()-start_time < 20: # for 10 seconds
     if theta_t < -np.pi:
         theta_t = np.pi+(theta_t+np.pi)
     
-    #theta_t = np.sign(theta_t)*(np.abs(theta_t) % np.pi)
-    print(theta_t*180/np.pi)
     x_k = np.array([x_t, y_t, np.cos(theta_t)*v, np.sin(theta_t)*v])
     G = np.array([[1,0,1,0],[0,1,0,1],[0,0,1,0],[0,0,0,1]])
     x_kk = G@x_k.T
@@ -80,4 +78,4 @@ while time.time()-start_time < 20: # for 10 seconds
     
     old_point, = plt.plot(x_t,y_t,'rx')
     plt.draw()
-    plt.pause(f_t)
+    plt.pause(t_s)
