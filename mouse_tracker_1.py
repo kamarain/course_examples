@@ -10,7 +10,7 @@ import numpy as np
 import time
 
 # Environment initialization
-t_s = 1/2 # sampling time in seconds
+t_s = 1/4 # sampling time in seconds
 x_m, y_m = +5,+5 # mouse start point
 x_t, y_t = -5,-5 # tracker start point
 
